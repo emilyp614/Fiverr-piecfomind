@@ -1,0 +1,113 @@
+create table Rev_Rec_Projection (
+	Deferral_Account_Account_Number varchar,
+	Destination_Account_Internal_ID varchar,
+	Destination_Account_Number varchar,
+	DP_type_lookup varchar,
+	DP_type_2_lookup varchar,
+	CustomerProject varchar,
+	End_User varchar,
+	End_User_Company_Name varchar,
+	Transaction_Type varchar,
+	Invoice_No varchar,
+	Date_invoice date,
+	Rev_Rec_Start_Date date,
+	Rev_Rec_End_Date date,
+	Rev_Rec_Period varchar,
+	Recognized_Revenue decimal,
+	Deferred_Revenue decimal,
+	Total decimal,
+	Projection decimal)
+	;
+	
+	select * from Rev_Rec_Projection;
+	
+	create table Dates_Accounts(
+	Join_date date,
+	Account_number varchar);
+	
+	select * from dates_accounts;
+	
+	COPY (
+		select * from dates_accounts da
+		left join  rev_rec_projection rrp
+		on da.account_number = rrp.Destination_Account_Number)
+		TO '/Users/[myusername]/Documents/Fiverr Sep 8 Piecfomind/sql/DATA_SET_2'
+		delimiter ','
+		CSV HEADER;
+		
+---for payroll upload
+
+create table payroll_projections (
+ID_payroll varchar,
+Employee_Name varchar,
+Hire_Date varchar,
+Date_of_Change date,
+Salary decimal,
+Actual decimal,
+Account varchar,
+Period_payroll varchar,
+Hourly_Rate decimal,
+Department varchar,
+jan decimal,
+feb decimal,
+mar decimal,
+apr decimal,
+may decimal,
+jun decimal,
+jul decimal,
+aug decimal,
+sep decimal,
+oct decimal,
+nov decimal,
+december decimal,
+Payroll_Total decimal
+);
+
+--drop table payroll_projections;
+
+select * from payroll_projections;
+
+COPY (
+select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department, '1/1/2020' AS MONTH_NAME, jan as month_payroll from payroll_projections
+		
+	union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department, '2/1/2020' AS MONTH_NAME, feb as month_payroll from payroll_projections
+
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '3/1/2020' AS MONTH_NAME,mar as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department, '4/1/2020' AS MONTH_NAME, apr as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '5/1/2020' AS MONTH_NAME, may as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '6/1/2020' AS MONTH_NAME,jun as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '7/1/2020' AS MONTH_NAME, jul as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '8/1/2020' AS MONTH_NAME, aug as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '9/1/2020' AS MONTH_NAME,sep as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '10/1/2020' AS MONTH_NAME,oct as month_payroll from payroll_projections
+
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '11/1/2020' AS MONTH_NAME,nov as month_payroll from payroll_projections
+union 
+		select id_payroll, employee_name, hire_date, date_of_change, salary, actual, account, 
+		period_payroll, hourly_rate, department,  '12/1/2020' AS MONTH_NAME,december as month_payroll from payroll_projections
+) 
+TO '/Users/[myusername]/Documents/Fiverr Sep 8 Piecfomind/sql/PAYROLL_PROJECTIONS_FLAT_3'
+		delimiter ','
+		CSV HEADER;
+		
